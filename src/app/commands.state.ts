@@ -7,8 +7,7 @@ const helpText = `
   <b>read</b>    read a blog post
   <b>ls</b>      List blog posts
 
-  <b class="gr">help</b>    Print this help menu
-`;
+  <b class="gr">help</b>    Print this help menu`;
 
 // Create sub help commands for each command
 const CMD_TREE = {
@@ -66,7 +65,7 @@ export class CommandsState {
         contentStr += cmdString + '\n';
       }
 
-      contentStr += content + '\n';
+      contentStr += content + '\n\n';
 
       this.contentStream.set(contentStr);
       return;
@@ -79,7 +78,7 @@ export class CommandsState {
       contentStr += '<b class="r">❯</b> ' + cmdString + '\n';
     }
 
-    contentStr += content + '\n';
+    contentStr += content + '\n\n';
 
     this.contentStream.set(contentStr);
   }
