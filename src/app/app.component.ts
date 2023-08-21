@@ -16,6 +16,7 @@ export class AppComponent implements OnInit {
   @ViewChild('textarea') textarea!: HTMLTextAreaElement;
 
   cmdField = fb.control('');
+  statusStr = this.cmdState.statusStr;
   cmdHistory = this.cmdState.cmdHistory.asReadonly();
   contentStream = this.cmdState.contentStream.asReadonly();
 

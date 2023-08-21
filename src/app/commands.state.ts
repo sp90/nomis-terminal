@@ -35,8 +35,7 @@ const CMD_TREE = {
   providedIn: 'root'
 })
 export class CommandsState {
-  private statusStr = '<b class="t">Nomis</b> via 🅰️ <b class="r">v16.2.1</b>';
-
+  statusStr = '<b class="t">Nomis</b> via 🅰️ <b class="r">v16.2.1</b>';
   cmdHistory = signal<string[]>([]);
   contentStream = signal<string>('');
 
