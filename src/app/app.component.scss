@@ -1,0 +1,50 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+section {
+  flex: 0 0;
+  position: relative;
+  z-index: 100;
+}
+
+label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+aside {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 4px;
+  z-index: 100;
+  position: relative;
+
+  textarea {
+    width: 100%;
+    background-color: transparent;
+    resize: none;
+    border: 0;
+    height: 12px;
+    line-height: 12px;
+    font-size: 11px;
+    color: #fff;
+    padding: 0;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+.cmd-caret {
+  color: rgb(12, 194, 12);
+}
