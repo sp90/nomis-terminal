@@ -5,14 +5,13 @@
 </section>
 
 <pre [innerHTML]="statusStr"></pre>
+<pre
+  class="text-loader"
+  *ngIf="cmdIsLoading()"
+>Loading <span>.</span><span>.</span><span>.</span></pre>
 <aside>
   <span class="cmd-caret">❯</span>
-  <textarea
-    #textarea
-    id="cmdField"
-    [formControl]="cmdField"
-    (keydown.enter)="submitCmd($event)"
-  ></textarea>
+  <textarea #textarea id="cmdField" tabindex="0" (keydown.enter)="submitCmd($event)"></textarea>
 </aside>
 
 <label for="cmdField"></label>

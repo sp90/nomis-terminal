@@ -1,35 +1,62 @@
-import 'zone.js/node';
+import 'zone.js/dist/zone-node';
 
 import { APP_BASE_HREF } from '@angular/common';
 import { ngExpressEngine } from '@nguniversal/express-engine';
 import * as express from 'express';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { POSTS, POSTS_LIST } from 'posts.const';
 import bootstrap from './src/main.server';
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express();
   const distFolder = join(process.cwd(), 'dist/nomis-terminal/browser');
-  const indexHtml = existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
+  const indexHtml = existsSync(join(distFolder, 'index.original.html'))
+    ? 'index.original.html'
+    : 'index';
 
   // Our Universal express-engine (found @ https://github.com/angular/universal/tree/main/modules/express-engine)
-  server.engine('html', ngExpressEngine({
-    bootstrap
-  }));
+  server.engine(
+    'html',
+    ngExpressEngine({
+      bootstrap
+    })
+  );
 
   server.set('view engine', 'html');
   server.set('views', distFolder);
 
   // Example Express Rest API endpoints
-  // server.get('/api/**', (req, res) => { });
+  server.get('/api/posts', (req, res) => {
+    res.send(POSTS_LIST);
+  });
+
+  server.get('/api/posts/:id', (req, res) => {
+    const id = parseInt(req.params.id, 10);
+    const post = POSTS.find((p) => p.i === id);
+
+    if (post) {
+      res.send(post);
+    } else {
+      res.status(404).send({ error: 'Post not found' });
+    }
+  });
+
+  // server.get('manifest.json', (req, res) => res.json({}));
+
   // Serve static files from /browser
-  server.get('*.*', express.static(distFolder, {
-    maxAge: '1y'
-  }));
+  server.get(
+    '*.*',
+    express.static(distFolder, {
+      maxAge: '1y'
+    })
+  );
 
   // All regular routes use the Universal engine
   server.get('*', (req, res) => {
+    console.log('helo: ');
+
     res.render(indexHtml, { req, providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }] });
   });
 
@@ -51,7 +78,7 @@ function run(): void {
 // The below code is to ensure that the server is run only when not requiring the bundle.
 declare const __non_webpack_require__: NodeRequire;
 const mainModule = __non_webpack_require__.main;
-const moduleFilename = mainModule && mainModule.filename || '';
+const moduleFilename = (mainModule && mainModule.filename) || '';
 if (moduleFilename === __filename || moduleFilename.includes('iisnode')) {
   run();
 }
