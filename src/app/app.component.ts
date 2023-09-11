@@ -29,7 +29,7 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.textarea?.nativeElement.focus();
     this.postsState.loadPosts();
-    this.cmdState.runCmd('help');
+    this.cmdState.runCmd('help init');
   }
 
   submitCmd($event: Event) {

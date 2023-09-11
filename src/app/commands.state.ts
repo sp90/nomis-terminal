@@ -1,4 +1,5 @@
-import { Injectable, VERSION, inject, signal } from '@angular/core';
+import { Location, isPlatformBrowser } from '@angular/common';
+import { Injectable, PLATFORM_ID, VERSION, inject, signal } from '@angular/core';
 import { Observable, catchError, finalize, map, of } from 'rxjs';
 import { PostsState } from './posts.state';
 
@@ -18,6 +19,8 @@ const helpText = `
   providedIn: 'root'
 })
 export class CommandsState {
+  platformId = inject(PLATFORM_ID);
+  location = inject(Location);
   postsState = inject(PostsState);
   statusStr = '<b class="t">Nomis</b> via 🅰️ <b class="r">v' + VERSION.full + '</b>';
   cmdIsLoading = signal<boolean>(false);
@@ -43,6 +46,11 @@ export class CommandsState {
 
       return this.postsState.getPost(_id).pipe(
         map((res) => res?.c),
+        finalize(() => {
+          if (isPlatformBrowser(this.platformId)) {
+            this.location.go('/' + id);
+          }
+        }),
         catchError((_) => of('read: no such file or directory: ' + id))
       );
     },
@@ -80,7 +88,13 @@ export class CommandsState {
       return 'Hello, Github!';
     },
     cmdNotFound: (cmd: string) => 'command not found: ' + cmd,
-    help: () => helpText
+    help: (_: string, init?: string) => {
+      if (isPlatformBrowser(this.platformId) && init !== 'init') {
+        this.location.go('');
+      }
+
+      return helpText;
+    }
   };
 
   runCmd(cmdString: string, noHistory = false) {
