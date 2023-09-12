@@ -35,6 +35,9 @@ export class AppComponent implements OnInit {
   submitCmd($event: Event) {
     $event.preventDefault();
 
+    console.log('$event: ', $event);
+    console.log('this.textarea.nativeElement.value: ', this.textarea.nativeElement.value);
+
     this.cmdState.runCmd(this.textarea.nativeElement.value);
     this.textarea.nativeElement.value = '';
   }
