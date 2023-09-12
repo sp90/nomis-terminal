@@ -11,7 +11,17 @@
 >Loading <span>.</span><span>.</span><span>.</span></pre>
 <aside>
   <span class="cmd-caret">❯</span>
-  <textarea #textarea id="cmdField" tabindex="0" (keydown.enter)="submitCmd($event)"></textarea>
+
+  <textarea
+    #textarea
+    id="cmdField"
+    [value]="cmdValue()"
+    (input)="cmdValue.set(textarea.value)"
+    tabindex="0"
+    (keydown.arrowup)="historyCmd($event, 'prev')"
+    (keydown.arrowdown)="historyCmd($event, 'next')"
+    (keydown.enter)="submitCmd($event)"
+  ></textarea>
 </aside>
 
 <label for="cmdField"></label>
