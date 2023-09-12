@@ -81,6 +81,8 @@ export class AppComponent implements OnInit {
   submitCmd($event: Event) {
     $event.preventDefault();
 
+    console.log('this.cmdValue(): ', this.cmdValue());
+
     this.cmdState.runCmd(this.cmdValue());
     this.cmdValue.set('');
   }

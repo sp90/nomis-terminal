@@ -104,6 +104,8 @@ export class CommandsState {
   };
 
   runCmd(cmdString: string, noHistory = false) {
+    console.log('cmdString: ', cmdString);
+
     if (noHistory === false) {
       this.cmdHistory.set([...this.cmdHistory(), cmdString]);
     }
