@@ -26,12 +26,24 @@ export class PostsState {
       .subscribe();
   }
 
-  getPost(i: number) {
+  getPost(id: string | `${number}`) {
+    const privateId = id && parseInt(id);
+    const _id = isNaN(privateId as number) ? id : privateId;
+
+    if (typeof _id === 'string') {
+      if (isPlatformServer(this.platformId)) {
+        const post = POSTS.find((p) => p.s === _id);
+        return of(post || null);
+      }
+
+      return this.http.get<Post>(`${this.BASE_PATH}/slug/${_id}`).pipe(take(1));
+    }
+
     if (isPlatformServer(this.platformId)) {
-      const post = POSTS.find((p) => p.i === i);
+      const post = POSTS.find((p) => p.i === _id);
       return of(post || null);
     }
 
-    return this.http.get<Post>(`${this.BASE_PATH}/${i}`).pipe(take(1));
+    return this.http.get<Post>(`${this.BASE_PATH}/${_id}`).pipe(take(1));
   }
 }

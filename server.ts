@@ -37,6 +37,16 @@ export function app(): express.Express {
     }
   });
 
+  server.get('/api/posts/slug/:slug', (req, res) => {
+    const post = POSTS.find((p) => p.s === req.params.slug);
+
+    if (post) {
+      res.send(post);
+    } else {
+      res.status(404).send({ error: 'Post not found' });
+    }
+  });
+
   // Serve static files from /browser
   server.get(
     '*.*',

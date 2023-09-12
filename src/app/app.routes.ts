@@ -5,11 +5,11 @@ import { CommandsState } from './commands.state';
 
 export const routes: Routes = [
   {
-    path: ':id',
+    path: ':slug',
     component: AppComponent,
     resolve: {
       post: (route: ActivatedRouteSnapshot) => {
-        inject(CommandsState).runCmd('read ' + route.params['id']);
+        inject(CommandsState).runCmd('read ' + route.params['slug']);
 
         return 'hello';
       }

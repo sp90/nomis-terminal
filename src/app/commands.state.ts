@@ -1,6 +1,6 @@
 import { Location, isPlatformBrowser } from '@angular/common';
 import { Injectable, PLATFORM_ID, VERSION, inject, signal } from '@angular/core';
-import { Observable, catchError, finalize, map, of } from 'rxjs';
+import { Observable, catchError, finalize, map, of, tap } from 'rxjs';
 import { PostsState } from './posts.state';
 
 type KeyValuePair = { [key: string]: Function };
@@ -39,20 +39,22 @@ export class CommandsState {
     //   return 'cd: no such file or directory: ' + dir;
     // },
     read: (_: string, id: string) => {
-      const _id = parseInt(id);
-
-      if (id === 'help' || id?.length === 0 || !id || isNaN(_id)) {
+      if (id === 'help' || id?.length === 0 || !id) {
         return this.CMD_TREE.readHelp();
       }
 
-      return this.postsState.getPost(_id).pipe(
-        map((res) => res?.c),
-        finalize(() => {
+      return this.postsState.getPost(id).pipe(
+        tap((res) => {
           if (isPlatformBrowser(this.platformId)) {
-            this.location.go('/' + id);
+            this.location.go('/' + res?.s);
           }
         }),
-        catchError((_) => of('read: no such file or directory: ' + id))
+        map((res) => res?.c),
+        catchError((_) => {
+          console.log('Get post error: ', _);
+
+          return of('read: no such file or directory: ' + id);
+        })
       );
     },
     readHelp: () => {
