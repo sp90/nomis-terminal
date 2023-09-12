@@ -7,8 +7,10 @@ type KeyValuePair = { [key: string]: Function };
 
 // <b>cd</b>      change directory
 const helpText = `
+  <h1>Nomis tech blog</h1>
   <b>read</b>    Read a blog post
   <b>ls</b>      List blog posts
+  <b>whois</b>   Who am I?
 
   <b>x</b>       Open 𝕏 profile
   <b>gh</b>      Open Github profile
@@ -87,6 +89,9 @@ export class CommandsState {
       window.open('https://github.com/sp90', '_blank');
       return 'Hello, Github!';
     },
+    about: () => {
+      return 'This is a blog about code';
+    },
     cmdNotFound: (cmd: string) => 'command not found: ' + cmd,
     help: (_: string, init?: string) => {
       if (isPlatformBrowser(this.platformId) && init !== 'init') {
@@ -123,8 +128,6 @@ export class CommandsState {
   }
 
   private addNewContent(content: string, cmdString?: string) {
-    console.log('content: ', content);
-
     const currentContent = this.contentStream();
     let contentStr = '';
 

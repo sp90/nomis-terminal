@@ -1,48 +1,27 @@
 import 'zone.js/dist/zone-node';
 
 import { APP_BASE_HREF } from '@angular/common';
-import { ngExpressEngine } from '@nguniversal/express-engine';
+import { CommonEngine } from '@angular/ssr';
 import * as express from 'express';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { POSTS, POSTS_LIST } from 'posts.const';
 import bootstrap from './src/main.server';
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express();
-  const distFolder = join(process.cwd(), 'dist/nomis-terminal/browser');
+  const distFolder = join(process.cwd(), '<%= browserDistDirectory %>');
   const indexHtml = existsSync(join(distFolder, 'index.original.html'))
-    ? 'index.original.html'
-    : 'index';
+    ? join(distFolder, 'index.original.html')
+    : join(distFolder, 'index.html');
 
-  // Our Universal express-engine (found @ https://github.com/angular/universal/tree/main/modules/express-engine)
-  server.engine(
-    'html',
-    ngExpressEngine({
-      bootstrap
-    })
-  );
+  const commonEngine = new CommonEngine();
 
   server.set('view engine', 'html');
   server.set('views', distFolder);
 
   // Example Express Rest API endpoints
-  server.get('/api/posts', (_, res) => {
-    res.send(POSTS_LIST);
-  });
-
-  server.get('/api/posts/:id', (req, res) => {
-    const id = parseInt(req.params.id, 10);
-    const post = POSTS.find((p) => p.i === id);
-
-    if (post) {
-      res.send(post);
-    } else {
-      res.status(404).send({ error: 'Post not found' });
-    }
-  });
-
+  // server.get('/api/**', (req, res) => { });
   // Serve static files from /browser
   server.get(
     '*.*',
@@ -51,9 +30,18 @@ export function app(): express.Express {
     })
   );
 
-  // All regular routes use the Universal engine
-  server.get('*', (req, res) => {
-    res.render(indexHtml, { req, providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }] });
+  // All regular routes use the Angular engine
+  server.get('*', (req, res, next) => {
+    commonEngine
+      .render({
+        bootstrap,
+        documentFilePath: indexHtml,
+        url: req.originalUrl,
+        publicPath: distFolder,
+        providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }]
+      })
+      .then((html) => res.send(html))
+      .catch((err) => next(err));
   });
 
   return server;
