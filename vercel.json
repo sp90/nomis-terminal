@@ -2,6 +2,7 @@
   "version": 2,
   "public": true,
   "name": "nomis-terminal",
+  "rewrites": [{ "source": "/(.*)", "destination": "/api" }],
   "functions": {
     "api/index.js": {
       "includeFiles": "dist/nomis-terminal/browser/**"
