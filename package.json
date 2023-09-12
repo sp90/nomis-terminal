@@ -1,7 +1,6 @@
 {
   "name": "nomis-terminal",
   "version": "0.0.0",
-  "type": "module",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port=4202",
