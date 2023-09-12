@@ -40,7 +40,7 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular-devkit/build-angular:application-esbuild",
           "options": {
             "outputPath": "dist/nomis-terminal/browser",
             "index": "src/index.html",
@@ -130,7 +130,7 @@
           "defaultConfiguration": "production"
         },
         "serve-ssr": {
-          "builder": "@nguniversal/builders:ssr-dev-server",
+          "builder": "@angular-devkit/build-angular:ssr-dev-server",
           "configurations": {
             "development": {
               "browserTarget": "nomis-terminal:build:development",
@@ -144,9 +144,11 @@
           "defaultConfiguration": "development"
         },
         "prerender": {
-          "builder": "@nguniversal/builders:prerender",
+          "builder": "@angular-devkit/build-angular:prerender",
           "options": {
-            "routes": ["/"]
+            "routes": ["/"],
+            "browserTarget": "app:build",
+            "serverTarget": "app:server"
           },
           "configurations": {
             "production": {

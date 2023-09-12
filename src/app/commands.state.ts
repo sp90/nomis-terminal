@@ -7,7 +7,6 @@ type KeyValuePair = { [key: string]: Function };
 
 // <b>cd</b>      change directory
 const helpText = `
-  <h1>Nomis tech blog</h1>
   <b>read</b>    Read a blog post
   <b>ls</b>      List blog posts
   <b>whois</b>   Who am I?
