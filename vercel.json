@@ -4,7 +4,7 @@
   "name": "nomis-terminal",
   "rewrites": [{ "source": "/(.*)", "destination": "/api" }],
   "functions": {
-    "api/index.js": {
+    "api/index.cjs": {
       "includeFiles": "dist/nomis-terminal/browser/**"
     }
   }
