@@ -36,6 +36,7 @@
     "@angular-devkit/build-angular": "^17.0.0-next.3",
     "@angular/cli": "~17.0.0-next.3",
     "@angular/compiler-cli": "^17.0.0-next.3",
+    "@netlify/plugin-angular-universal": "^1.0.1",
     "@types/node": "^20.5.9",
     "typescript": "~5.1.6"
   }
