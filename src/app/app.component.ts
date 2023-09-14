@@ -40,7 +40,7 @@ export class AppComponent implements OnInit {
   constructor(private cmdState: CommandsState, private postsState: PostsState) {}
 
   @HostListener('window:mouseup', ['$event'])
-  mouseUp(event: MouseEvent) {
+  mouseUp(_: MouseEvent) {
     const selection = (window as any)?.getSelection()?.toString();
 
     if (!selection || selection.length === 0) {
@@ -50,7 +50,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.postsState.loadPosts();
-    this.cmdState.runCmd('help init');
+    this.cmdState.runCmd('help init', true);
   }
 
   historyCmd($event: Event, dir: 'prev' | 'next') {
@@ -79,11 +79,7 @@ export class AppComponent implements OnInit {
   }
 
   submitCmd($event: Event) {
-    console.log('$event: ', $event);
-
     $event.preventDefault();
-
-    console.log('this.cmdValue(): ', this.cmdValue());
 
     this.cmdState.runCmd(this.cmdValue());
     this.cmdValue.set('');

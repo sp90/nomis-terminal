@@ -1,20 +1,10 @@
 import { Location, isPlatformBrowser } from '@angular/common';
 import { Injectable, PLATFORM_ID, VERSION, inject, signal } from '@angular/core';
 import { Observable, catchError, finalize, map, of, tap } from 'rxjs';
+import { GH, HELP_TEXT, READ_HELP, WHOIS, X } from './command.const';
 import { PostsState } from './posts.state';
 
 type KeyValuePair = { [key: string]: Function };
-
-// <b>cd</b>      change directory
-const helpText = `
-  <b>read</b>    Read a blog post
-  <b>ls</b>      List blog posts
-  <b>whois</b>   Who am I?
-
-  <b>x</b>       Open 𝕏 profile
-  <b>gh</b>      Open Github profile
-
-  <b class="gr">help</b>    Print this help menu`;
 
 @Injectable({
   providedIn: 'root'
@@ -50,16 +40,10 @@ export class CommandsState {
           }
         }),
         map((res) => res?.c),
-        catchError((_) => {
-          console.log('Get post error: ', _);
-
-          return of('read: no such file or directory: ' + id);
-        })
+        catchError((_) => of('read: no such file or directory: ' + id))
       );
     },
-    readHelp: () => {
-      return `read [ID] - Read a blog post by parsing id of blog post found in <b class="r">ls</b>`;
-    },
+    readHelp: () => READ_HELP,
     ls: () => {
       // Preload all blog posts
       // Show a list of blog post slugs
@@ -82,16 +66,14 @@ export class CommandsState {
 
       return postStr;
     },
+    whois: () => WHOIS,
     x: () => {
       window.open('https://x.com/SimonBitwise', '_blank');
-      return 'Hello, 𝕏!';
+      return X;
     },
     gh: () => {
       window.open('https://github.com/sp90', '_blank');
-      return 'Hello, Github!';
-    },
-    about: () => {
-      return 'This is a blog about code';
+      return GH;
     },
     cmdNotFound: (cmd: string) => 'command not found: ' + cmd,
     help: (_: string, init?: string) => {
@@ -99,13 +81,11 @@ export class CommandsState {
         this.location.go('');
       }
 
-      return helpText;
+      return HELP_TEXT;
     }
   };
 
   runCmd(cmdString: string, noHistory = false) {
-    console.log('cmdString: ', cmdString);
-
     if (noHistory === false) {
       this.cmdHistory.set([...this.cmdHistory(), cmdString]);
     }
