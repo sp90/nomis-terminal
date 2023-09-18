@@ -12,7 +12,7 @@
     "test": "ng test",
     "load:test": "bombardier -c 125 -n 10000 http://localhost:4202",
     "dev:ssr": "ng run nomis-terminal:serve-ssr --port=4202",
-    "gen:posts": "node generate-posts.json",
+    "gen:posts": "node generate-posts.js",
     "serve:ssr": "bun dist/nomis-terminal/server/main.js",
     "serve:ssr:node": "node dist/nomis-terminal/server/main.js",
     "build:ssr": "npm run gen:posts && ng build && ng run nomis-terminal:server",
