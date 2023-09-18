@@ -18,6 +18,8 @@ export function app(): express.Express {
 
   const commonEngine = new CommonEngine();
 
+  console.log('distFolder: ', distFolder);
+
   server.set('view engine', 'html');
   server.set('views', distFolder);
 
