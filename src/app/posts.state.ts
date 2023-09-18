@@ -28,7 +28,12 @@ export class PostsState {
 
   getPost(id: string | `${number}`) {
     const privateId = id && parseInt(id);
-    const _id = isNaN(privateId as number) ? id : privateId;
+    const _id =
+      privateId.toString().length !== id.toString().length || isNaN(privateId as number)
+        ? id
+        : privateId;
+
+    console.log('_id: ', _id);
 
     if (typeof _id === 'string') {
       if (isPlatformServer(this.platformId)) {

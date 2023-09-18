@@ -21,7 +21,8 @@ h2,
 h3,
 h4,
 h5,
-h6 {
+h6,
+p {
   margin: 0;
   padding: 0;
   font-size: 11px;
@@ -71,6 +72,48 @@ pre {
     &.r,
     &[r] {
       color: #cd482e;
+    }
+  }
+
+  .post {
+    white-space-collapse: initial;
+    text-wrap: initial;
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+    max-width: 600px;
+    padding: 12px 12px;
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-size: 1.2em;
+      line-height: 1.2;
+      padding: 8px 0 0;
+    }
+
+    img {
+      width: 100%;
+      padding: 12px 0;
+    }
+
+    ul {
+      padding-left: 22px;
+    }
+
+    pre {
+      padding: 12px;
+    }
+
+    hr {
+      width: calc(100% - 24px);
+      height: 1px;
+      border: 0;
+      background: #fff;
+      margin: 12px;
     }
   }
 }

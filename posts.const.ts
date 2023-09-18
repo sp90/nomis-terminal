@@ -1,3 +1,5 @@
+import generatedPosts from './generated-posts.json';
+
 export type PostPreview = {
   i: number;
   s: string;
@@ -9,22 +11,5 @@ export type Post = {
   c: string;
 };
 
-export const POSTS = [
-  {
-    i: 0,
-    s: 'hello-angular-universal',
-    c: 'This is the first blog post'
-  },
-  {
-    i: 1,
-    s: 'second-blog-post',
-    c: 'This is the second blog post'
-  },
-  {
-    i: 2,
-    s: 'third-blog-post',
-    c: 'This is the third blog post'
-  }
-];
-
-export const POSTS_LIST = POSTS.map((p) => ({ i: p.i, s: p.s }));
+export const POSTS = generatedPosts as Post[];
+export const POSTS_LIST = (generatedPosts as Post[]).map((p) => ({ i: p.i, s: p.s }));

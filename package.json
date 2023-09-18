@@ -12,9 +12,10 @@
     "test": "ng test",
     "load:test": "bombardier -c 125 -n 10000 http://localhost:4202",
     "dev:ssr": "ng run nomis-terminal:serve-ssr --port=4202",
+    "gen:posts": "node generate-posts.json",
     "serve:ssr": "bun dist/nomis-terminal/server/main.js",
     "serve:ssr:node": "node dist/nomis-terminal/server/main.js",
-    "build:ssr": "ng build && ng run nomis-terminal:server",
+    "build:ssr": "npm run gen:posts && ng build && ng run nomis-terminal:server",
     "prerender": "ng run nomis-terminal:prerender"
   },
   "private": true,
@@ -30,6 +31,7 @@
     "@angular/router": "^17.0.0-next.3",
     "@angular/ssr": "^17.0.0-next.1",
     "express": "^4.18.2",
+    "marked": "^9.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.6.2",
     "zone.js": "0.13.0"
@@ -39,7 +41,8 @@
     "@angular/cli": "~17.0.0-next.3",
     "@angular/compiler-cli": "^17.0.0-next.3",
     "@netlify/plugin-angular-universal": "^1.0.1",
-    "@types/node": "^20.5.9",
+    "@types/marked": "^5.0.1",
+    "@types/node": "^20.6.2",
     "typescript": "~5.1.6"
   }
 }

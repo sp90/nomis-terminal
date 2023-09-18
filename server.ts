@@ -3,8 +3,8 @@ import 'zone.js/dist/zone-node';
 import { APP_BASE_HREF } from '@angular/common';
 import { CommonEngine } from '@angular/ssr';
 import * as express from 'express';
-import { existsSync } from 'node:fs';
-import { join } from 'node:path';
+import { existsSync } from 'fs';
+import { join } from 'path';
 import { POSTS, POSTS_LIST } from 'posts.const';
 import bootstrap from './src/main.server';
 
