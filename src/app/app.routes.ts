@@ -7,6 +7,7 @@ export const routes: Routes = [
   {
     path: ':slug',
     component: AppComponent,
+    providers: [CommandsState],
     resolve: {
       post: (route: ActivatedRouteSnapshot) => {
         inject(CommandsState).runCmd('read ' + route.params['slug']);

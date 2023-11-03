@@ -1,4 +1,4 @@
-import 'zone.js/dist/zone-node';
+import 'zone.js';
 
 import { APP_BASE_HREF } from '@angular/common';
 import { CommonEngine } from '@angular/ssr';
@@ -30,7 +30,7 @@ export function app(): express.Express {
 
   server.get('/api/posts/:id', (req, res) => {
     const id = parseInt(req.params.id, 10);
-    const post = POSTS.find((p) => p.i === id);
+    const post = POSTS.find(p => p.i === id);
 
     if (post) {
       res.send(post);
@@ -40,7 +40,7 @@ export function app(): express.Express {
   });
 
   server.get('/api/posts/slug/:slug', (req, res) => {
-    const post = POSTS.find((p) => p.s === req.params.slug);
+    const post = POSTS.find(p => p.s === req.params.slug);
 
     if (post) {
       res.send(post);
@@ -53,7 +53,7 @@ export function app(): express.Express {
   server.get(
     '*.*',
     express.static(distFolder, {
-      maxAge: '1y'
+      maxAge: '1y',
     })
   );
 
@@ -65,10 +65,10 @@ export function app(): express.Express {
         documentFilePath: indexHtml,
         url: req.originalUrl,
         publicPath: distFolder,
-        providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }]
+        providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }],
       })
-      .then((html) => res.send(html))
-      .catch((err) => next(err));
+      .then(html => res.send(html))
+      .catch(err => next(err));
   });
 
   return server;
