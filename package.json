@@ -20,16 +20,16 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^17.1.0-rc.0",
-    "@angular/common": "^17.1.0-rc.0",
-    "@angular/compiler": "^17.1.0-rc.0",
-    "@angular/core": "^17.1.0-rc.0",
-    "@angular/forms": "^17.1.0-rc.0",
-    "@angular/platform-browser": "^17.1.0-rc.0",
-    "@angular/platform-browser-dynamic": "^17.1.0-rc.0",
-    "@angular/platform-server": "^17.1.0-rc.0",
-    "@angular/router": "^17.1.0-rc.0",
-    "@angular/ssr": "^17.1.0-rc.0",
+    "@angular/animations": "^18.0.0",
+    "@angular/common": "^18.0.0",
+    "@angular/compiler": "^18.0.0",
+    "@angular/core": "^18.0.0",
+    "@angular/forms": "^18.0.0",
+    "@angular/platform-browser": "^18.0.0",
+    "@angular/platform-browser-dynamic": "^18.0.0",
+    "@angular/platform-server": "^18.0.0",
+    "@angular/router": "^18.0.0",
+    "@angular/ssr": "^18.0.1",
     "@types/jsdom": "^21.1.6",
     "express": "^4.18.2",
     "highlight.js": "^11.9.0",
@@ -40,13 +40,13 @@
     "zone.js": "0.14.3"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^17.1.0-rc.0",
-    "@angular/cli": "~17.1.0-rc.0",
-    "@angular/compiler-cli": "^17.1.0-rc.0",
+    "@angular-devkit/build-angular": "^18.0.1",
+    "@angular/cli": "~18.0.1",
+    "@angular/compiler-cli": "^18.0.0",
     "@netlify/plugin-angular-universal": "^1.0.1",
     "@types/marked": "^6.0.0",
     "@types/node": "^20.11.2",
     "browser-sync": "^3.0.2",
-    "typescript": "~5.2.2"
+    "typescript": "~5.4.5"
   }
 }
