@@ -1,18 +1,18 @@
 import { isPlatformServer } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
+import { Injectable, PLATFORM_ID, inject, signal } from '@angular/core';
 import { POSTS, POSTS_LIST, Post, PostPreview } from 'posts.const';
 import { of, take, tap } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PostsState {
+  private http = inject(HttpClient);
+  private platformId = inject(PLATFORM_ID);
   private BASE_PATH = '/api/posts';
 
   posts = signal<PostPreview[]>([]);
-
-  constructor(private http: HttpClient, @Inject(PLATFORM_ID) private platformId: Object) {}
 
   loadPosts() {
     if (isPlatformServer(this.platformId)) {
@@ -22,7 +22,7 @@ export class PostsState {
 
     this.http
       .get<PostPreview[]>(this.BASE_PATH)
-      .pipe(tap((res) => this.posts.set(res)))
+      .pipe(tap(res => this.posts.set(res)))
       .subscribe();
   }
 
@@ -33,19 +33,19 @@ export class PostsState {
         ? id
         : privateId;
 
-    console.log('_id: ', _id);
-
     if (typeof _id === 'string') {
       if (isPlatformServer(this.platformId)) {
-        const post = POSTS.find((p) => p.s === _id);
+        const post = POSTS.find(p => p.s === _id);
         return of(post || null);
       }
 
       return this.http.get<Post>(`${this.BASE_PATH}/slug/${_id}`).pipe(take(1));
     }
 
+    console.log('isPlatformServer(this.platformId): ', isPlatformServer(this.platformId));
+
     if (isPlatformServer(this.platformId)) {
-      const post = POSTS.find((p) => p.i === _id);
+      const post = POSTS.find(p => p.i === _id);
       return of(post || null);
     }
 

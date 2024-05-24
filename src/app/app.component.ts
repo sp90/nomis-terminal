@@ -6,7 +6,8 @@ import {
   Input,
   OnInit,
   ViewChild,
-  signal
+  inject,
+  signal,
 } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Post } from 'posts.const';
@@ -18,9 +19,11 @@ import { PostsState } from './posts.state';
   standalone: true,
   imports: [RouterOutlet, NgIf],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
+  private cmdState = inject(CommandsState);
+  private postsState = inject(PostsState);
   private historyIndex: number | null = null;
 
   @Input() post!: Post;
@@ -37,8 +40,6 @@ export class AppComponent implements OnInit {
   cmdIsLoading = this.cmdState.cmdIsLoading.asReadonly();
   contentStream = this.cmdState.contentStream.asReadonly();
 
-  constructor(private cmdState: CommandsState, private postsState: PostsState) {}
-
   @HostListener('window:mouseup', ['$event'])
   mouseUp(_: MouseEvent) {
     const selection = (window as any)?.getSelection()?.toString();
@@ -50,7 +51,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.postsState.loadPosts();
-    this.cmdState.runCmd('help init', true);
+    this.cmdState.runCmd('help init', true).subscribe();
   }
 
   historyCmd($event: Event, dir: 'prev' | 'next') {
@@ -81,7 +82,7 @@ export class AppComponent implements OnInit {
   submitCmd($event: Event) {
     $event.preventDefault();
 
-    this.cmdState.runCmd(this.cmdValue());
+    this.cmdState.runCmd(this.cmdValue()).subscribe();
     this.cmdValue.set('');
   }
 }

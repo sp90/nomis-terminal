@@ -7,8 +7,7 @@
 <pre [innerHTML]="statusStr"></pre>
 <pre
   class="text-loader"
-  *ngIf="cmdIsLoading()"
->Loading <span>.</span><span>.</span><span>.</span></pre>
+  *ngIf="cmdIsLoading()">Loading <span>.</span><span>.</span><span>.</span></pre>
 <aside>
   <span class="cmd-caret">❯</span>
 
@@ -24,8 +23,7 @@
     autocomplete="off"
     autocorrect="off"
     autocapitalize="off"
-    spellcheck="false"
-  ></textarea>
+    spellcheck="false"></textarea>
 </aside>
 
 <label for="cmdField"></label>

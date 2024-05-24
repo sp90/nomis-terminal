@@ -7,9 +7,11 @@ import { PostsState } from './posts.state';
 type KeyValuePair = { [key: string]: Function };
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CommandsState {
+  // constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+
   platformId = inject(PLATFORM_ID);
   location = inject(Location);
   postsState = inject(PostsState);
@@ -34,13 +36,9 @@ export class CommandsState {
       }
 
       return this.postsState.getPost(id).pipe(
-        tap((res) => {
-          if (isPlatformBrowser(this.platformId)) {
-            this.location.go('/' + res?.s);
-          }
-        }),
-        map((res) => res?.c),
-        catchError((_) => of('read: no such file or directory: ' + id))
+        tap(res => isPlatformBrowser(this.platformId) && this.location.go('/' + res?.s)),
+        map(res => res?.c),
+        catchError(_ => of('read: no such file or directory: ' + id))
       );
     },
     readHelp: () => READ_HELP,
@@ -82,7 +80,7 @@ export class CommandsState {
       }
 
       return HELP_TEXT;
-    }
+    },
   };
 
   runCmd(cmdString: string, noHistory = false) {
@@ -100,19 +98,22 @@ export class CommandsState {
     if (result instanceof Observable) {
       this.cmdIsLoading.set(true);
 
-      return result
-        .pipe(finalize(() => this.cmdIsLoading.set(false)))
-        .subscribe((res: any) => this.addNewContent(res, cmdString));
+      return result.pipe(
+        tap(res => this.addNewContent(res)),
+        finalize(() => this.cmdIsLoading.set(false))
+      );
     }
 
     this.addNewContent(result, cmd === 'help' ? undefined : cmdString);
 
-    return result;
+    return of(result);
   }
 
   private addNewContent(content: string, cmdString?: string) {
     const currentContent = this.contentStream();
     let contentStr = '';
+
+    // console.log('hello: ', content);
 
     if (currentContent === '') {
       contentStr += this.statusStr + '\n';

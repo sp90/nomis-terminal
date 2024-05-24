@@ -10,10 +10,13 @@ export const routes: Routes = [
     providers: [CommandsState],
     resolve: {
       post: (route: ActivatedRouteSnapshot) => {
-        inject(CommandsState).runCmd('read ' + route.params['slug']);
+        // console.log("route.params['slug']: ", route.params['slug']);
+        console.log('hello: ');
 
-        return 'hello';
-      }
-    }
-  }
+        return inject(CommandsState).runCmd('read ' + route.params['slug']);
+
+        // return 'hello';
+      },
+    },
+  },
 ];

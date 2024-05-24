@@ -1,5 +1,3 @@
-import 'zone.js';
-
 import { APP_BASE_HREF } from '@angular/common';
 import { CommonEngine } from '@angular/ssr';
 import * as express from 'express';
@@ -18,7 +16,7 @@ export function app(): express.Express {
 
   const commonEngine = new CommonEngine();
 
-  console.log('distFolder: ', distFolder);
+  // console.log('distFolder: ', distFolder);
 
   server.set('view engine', 'html');
   server.set('views', distFolder);
@@ -67,7 +65,14 @@ export function app(): express.Express {
         publicPath: distFolder,
         providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }],
       })
-      .then(html => res.send(html))
+      .then(html => {
+        if (req.originalUrl === '/5-tips-to-become-better-at-css') {
+          // console.log('req.originalUrl: ', req.originalUrl);
+          // console.log('html: ', html);
+        }
+
+        return res.send(html);
+      })
       .catch(err => next(err));
   });
 
