@@ -42,8 +42,6 @@ export class PostsState {
       return this.http.get<Post>(`${this.BASE_PATH}/slug/${_id}`).pipe(take(1));
     }
 
-    console.log('isPlatformServer(this.platformId): ', isPlatformServer(this.platformId));
-
     if (isPlatformServer(this.platformId)) {
       const post = POSTS.find(p => p.i === _id);
       return of(post || null);

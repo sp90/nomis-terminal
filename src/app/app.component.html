@@ -1,6 +1,4 @@
 <section role="terminal-content">
-  <!-- <router-outlet></router-outlet> -->
-  <!-- <div class="content-stream">{{ contentStream() }}</div> -->
   <pre [innerHTML]="contentStream()"></pre>
 </section>
 
@@ -12,10 +10,10 @@
   <span class="cmd-caret">❯</span>
 
   <textarea
-    #textarea
+    #textareaEl
     id="cmdField"
     [value]="cmdValue()"
-    (input)="cmdValue.set(textarea.value)"
+    (input)="cmdValue.set(textareaEl.value)"
     tabindex="0"
     (keydown.arrowup)="historyCmd($event, 'prev')"
     (keydown.arrowdown)="historyCmd($event, 'next')"

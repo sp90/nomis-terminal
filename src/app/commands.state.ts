@@ -113,8 +113,6 @@ export class CommandsState {
     const currentContent = this.contentStream();
     let contentStr = '';
 
-    // console.log('hello: ', content);
-
     if (currentContent === '') {
       contentStr += this.statusStr + '\n';
 

@@ -1,18 +1,19 @@
-import { NgIf } from '@angular/common';
+import { NgIf, isPlatformBrowser } from '@angular/common';
 import {
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   HostListener,
-  Input,
-  OnInit,
-  ViewChild,
+  PLATFORM_ID,
+  computed,
   inject,
+  input,
   signal,
+  viewChild,
 } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Post } from 'posts.const';
 import { CommandsState } from './commands.state';
-import { PostsState } from './posts.state';
 
 @Component({
   selector: 'app-root',
@@ -20,38 +21,52 @@ import { PostsState } from './posts.state';
   imports: [RouterOutlet, NgIf],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
+  private platformId = inject(PLATFORM_ID);
   private cmdState = inject(CommandsState);
-  private postsState = inject(PostsState);
   private historyIndex: number | null = null;
 
-  @Input() post!: Post;
-  @ViewChild('textarea') textareaEl!: ElementRef<HTMLTextAreaElement>;
-  @ViewChild('textarea') set textarea(ref: ElementRef<HTMLTextAreaElement>) {
-    if (!!ref) {
-      ref.nativeElement.focus();
-    }
-  }
+  post = input.required<Post>();
+  textareaEl = viewChild.required<ElementRef<HTMLTextAreaElement>>('textareaEl');
 
   cmdValue = signal('');
   statusStr = this.cmdState.statusStr;
   cmdHistory = this.cmdState.cmdHistory.asReadonly();
   cmdIsLoading = this.cmdState.cmdIsLoading.asReadonly();
-  contentStream = this.cmdState.contentStream.asReadonly();
-
-  @HostListener('window:mouseup', ['$event'])
-  mouseUp(_: MouseEvent) {
-    const selection = (window as any)?.getSelection()?.toString();
-
-    if (!selection || selection.length === 0) {
-      this.textareaEl.nativeElement.focus();
+  contentStream = computed(() => {
+    if (isPlatformBrowser(this.platformId)) {
+      this.textareaEl().nativeElement.focus();
     }
+
+    return this.cmdState.contentStream();
+  });
+
+  // @HostListener('window:mouseup', ['$event'])
+  // mouseUp(_: MouseEvent) {
+  //   const selection = (window as any)?.getSelection()?.toString();
+
+  //   if (!selection || selection.length === 0) {
+  //     this.textareaEl().nativeElement.focus();
+  //   }
+  // }
+
+  @HostListener('window:keydown', ['$event'])
+  keyDown($event: KeyboardEvent) {
+    const notIncluding: string[] = [];
+
+    if (notIncluding.includes($event.key)) {
+      return;
+    }
+
+    this.textareaEl().nativeElement.focus();
   }
 
-  ngOnInit(): void {
-    this.postsState.loadPosts();
-    this.cmdState.runCmd('help init', true).subscribe();
+  ngAfterViewInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      this.textareaEl().nativeElement.focus();
+    }
   }
 
   historyCmd($event: Event, dir: 'prev' | 'next') {
