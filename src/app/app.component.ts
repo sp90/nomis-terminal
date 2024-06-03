@@ -5,7 +5,7 @@ import {
   ElementRef,
   HostListener,
   PLATFORM_ID,
-  computed,
+  effect,
   inject,
   input,
   signal,
@@ -30,27 +30,40 @@ export class AppComponent {
 
   post = input.required<Post>();
   textareaEl = viewChild.required<ElementRef<HTMLTextAreaElement>>('textareaEl');
+  preEl = viewChild.required<ElementRef<HTMLPreElement>>('preEl');
 
   cmdValue = signal('');
   statusStr = this.cmdState.statusStr;
   cmdHistory = this.cmdState.cmdHistory.asReadonly();
   cmdIsLoading = this.cmdState.cmdIsLoading.asReadonly();
-  contentStream = computed(() => {
-    if (isPlatformBrowser(this.platformId)) {
-      this.textareaEl().nativeElement.focus();
-    }
 
-    return this.cmdState.contentStream();
-  });
+  constructor() {
+    effect(() => {
+      const contentStream = this.cmdState.contentStream();
 
-  // @HostListener('window:mouseup', ['$event'])
-  // mouseUp(_: MouseEvent) {
-  //   const selection = (window as any)?.getSelection()?.toString();
+      this.preEl().nativeElement.innerHTML = contentStream;
 
-  //   if (!selection || selection.length === 0) {
-  //     this.textareaEl().nativeElement.focus();
-  //   }
-  // }
+      if (isPlatformBrowser(this.platformId)) {
+        this.textareaEl().nativeElement.focus();
+        this.onScroll(new Event('scroll'));
+      }
+    });
+  }
+
+  @HostListener('window:scroll', ['$event'])
+  onScroll(_: Event) {
+    const nonLoadedImages = document.querySelectorAll<HTMLImageElement>('img[data-src]');
+
+    nonLoadedImages.forEach(img => {
+      const rect = img.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom >= 0) {
+        const dataSrc = img.getAttribute('data-src') as string;
+
+        img.setAttribute('src', dataSrc);
+        img.removeAttribute('data-src');
+      }
+    });
+  }
 
   @HostListener('window:keydown', ['$event'])
   keyDown($event: KeyboardEvent) {

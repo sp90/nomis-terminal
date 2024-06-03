@@ -10,13 +10,12 @@ type KeyValuePair = { [key: string]: Function };
   providedIn: 'root',
 })
 export class CommandsState {
-  // constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  private platformId = inject(PLATFORM_ID);
+  private location = inject(Location);
+  private postsState = inject(PostsState);
 
-  platformId = inject(PLATFORM_ID);
-  location = inject(Location);
-  postsState = inject(PostsState);
-  statusStr = '<b class="t">Nomis</b> via 🅰️ <b class="r">v' + VERSION.full + '</b>';
   cmdIsLoading = signal<boolean>(false);
+  statusStr = '<b class="t">Nomis</b> via 🅰️ <b class="r">v' + VERSION.full + '</b>';
   cmdHistory = signal<string[]>([]);
   contentStream = signal<string>('');
   CMD_TREE = {
