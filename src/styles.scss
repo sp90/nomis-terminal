@@ -98,8 +98,10 @@ pre {
     }
 
     img {
-      width: 100%;
-      padding: 12px 0;
+      width: inherit;
+      margin: 12px 0;
+      max-width: 800px;
+      height: auto;
     }
 
     ul {
