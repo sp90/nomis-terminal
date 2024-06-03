@@ -89,6 +89,8 @@ async function replaceFirstImage(originString: string): Promise<string> {
   const dom = new JSDOM(originString);
   const imgElements = dom.window.document.querySelectorAll('img'); // Get all img elements
 
+  let index = 0;
+
   for (const element of imgElements) {
     const src = element.getAttribute('src');
 
@@ -96,8 +98,10 @@ async function replaceFirstImage(originString: string): Promise<string> {
       const placeholder = await createPlaceholder(src);
 
       if (placeholder) {
-        element.setAttribute('data-src', src);
-        element.setAttribute('src', placeholder.placeholderSrc);
+        if (index > 1) {
+          element.setAttribute('data-src', src);
+          element.setAttribute('src', placeholder.placeholderSrc);
+        }
 
         if (placeholder.originalWidth) {
           element.setAttribute('width', placeholder.originalWidth + 'px');
@@ -111,6 +115,8 @@ async function replaceFirstImage(originString: string): Promise<string> {
         element.removeAttribute('src');
       }
     }
+
+    index++;
   }
 
   return dom.serialize();
