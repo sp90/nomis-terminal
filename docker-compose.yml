@@ -7,7 +7,7 @@ services:
       args:
         BUILD_ENV: ${BUILD_ENV:-dev}
     ports:
-      - '${APP_PORT:-4202}:4202'
+      - '${APP_PORT:-4203}:4203'
     command: bun run serve:ssr
     environment:
       NODE_ENV: ${NODE_ENV:-production}
