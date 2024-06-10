@@ -1,0 +1,13 @@
+version: '3.8' # Using a modern compose version
+
+services:
+  nomis-terminal:
+    build:
+      context: .
+      args:
+        BUILD_ENV: ${BUILD_ENV:-dev}
+    ports:
+      - '${APP_PORT:-4202}:4202'
+    command: bun run serve:ssr
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
